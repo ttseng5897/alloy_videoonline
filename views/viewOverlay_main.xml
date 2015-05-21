@@ -1,0 +1,20 @@
+<Alloy>
+	<View id="viewOverlayMain">
+			<View id="viewStatusBar">
+				<Button id="btnScreen"s></Button>
+				<Button id="btnCamera"></Button>
+				<Button id="btnFlash"></Button>
+				<Button id="btnQuality"></Button>
+				<View id="viewMessage">
+					<Label id="lblMessageText"></Label>
+				</View>
+			</View>
+			<View id="viewMainButtons">
+				<Button id="btnLength"></Button>
+				<Button id="btnDropbox"></Button>
+				<Button id="btnList"></Button>
+				<Button id="btnRecord" />
+				<Label id="lblRecordTimer" />
+			</View>
+	</View>
+</Alloy>

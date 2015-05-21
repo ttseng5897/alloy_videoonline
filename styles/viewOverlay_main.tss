@@ -1,0 +1,118 @@
+"#viewOverlayMain": {
+	width: "100%",
+	height: "100%"
+	
+}
+
+"#viewStatusBar": {
+	top: 0,
+	width: "100%",
+	height: 80
+}
+
+"#viewMainButtons": {
+	width: "100%",
+	height: 80,
+	bottom: 0
+}
+
+"#btnLength": {
+	width: 60,
+	height: 60,
+	left: 8,
+	image: "/images/saveto1.png",
+	//backgroundColor: "#7D848C",
+	backgroundSelectedColor: "#979DA6"
+}
+
+"#btnDropbox": {
+	width: 60,
+	height: 60,
+	left: 70,
+	image: "/images/saveto1.png",
+	//backgroundColor: "#7D848C",
+	backgroundSelectedColor: "#979DA6"
+}
+
+"#btnList": {
+	width: 60,
+	height: 60,
+	right: 135,
+	image: "/images/list.png",
+	//backgroundColor: "#7D848C",
+	backgroundSelectedColor: "#979DA6"
+}
+
+"#btnRecord": {
+	width: 90,
+	height: 90,
+	right: 5,
+	image: "/images/record1.png"
+}
+
+"#lblRecordTimer": {
+	width: 50,
+	height: 20,
+	right: 95,
+	color: "red",
+	font: {
+			fontSize: 15,
+			fontFamily: 'Helvetica Neue'
+		},
+	textAlign: 'right'
+}
+
+"#btnScreen": {
+	width: 35,
+	height: 35,
+	top: 3,
+	left: 10,
+	backgroundImage: "/images/screen.png",
+	//backgroundColor: "black",
+	//backgroundSelectedColor: "#979DA6"
+}
+
+"#btnCamera": {
+	width: 35,
+	height: 35,
+	top: 3,
+	left: 80,
+	backgroundImage: "/images/cameraSwitch.png",
+	//backgroundColor: "black",
+	//backgroundSelectedColor: "#979DA6"
+}
+
+"#btnFlash": {
+	width: 35,
+	height: 35,
+	top: 3,
+	right: 80,
+	backgroundImage: "/images/flash.png",
+	//backgroundColor: "black",
+	//backgroundSelectedColor: "#979DA6"
+}
+
+"#btnQuality": {
+	width: 35,
+	height: 35,
+	top: 3,
+	right: 10,
+	backgroundImage: "/images/video1.png",
+	//backgroundColor: "black",
+	//backgroundSelectedColor: "#979DA6"
+}
+
+"#viewMessage": {
+	width: "100%",
+	height: 35,
+	bottom: 2
+}
+
+"#lblMessageText": {
+	color: "green",
+	font: {
+			fontSize: 18,
+			fontFamily: 'Helvetica Neue'
+		},
+	textAlign: 'center'
+}
