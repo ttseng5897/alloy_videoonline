@@ -154,14 +154,31 @@ $.btnDropbox.image = "/images/saveto" + Titanium.App.Properties.getInt('recordSa
 $.btnDropbox.addEventListener('click',function() {
 	//Ti.API.log('recordSaveTo = '+Titanium.App.Properties.getInt('recordVideoLength'));
 	if(Titanium.App.Properties.getInt('recordSaveTo') == 1) {  // recordSaveTo: 0 is save to local gallery , 1 is upload to Dropbox
+		//Titanium.App.Properties.setBool('recordSaveGallery',true);
 		$.btnDropbox.image = "/images/saveto0.png";
 		Titanium.App.Properties.setInt('recordSaveTo',0);
-		//Titanium.App.Properties.setBool('recordSaveGallery',true);
+		
 	}else{
+		//Titanium.App.Properties.setBool('recordSaveGallery',false);
 		$.btnDropbox.image = "/images/saveto1.png";
 		Titanium.App.Properties.setInt('recordSaveTo',1);
-		//Titanium.App.Properties.setBool('recordSaveGallery',false);
+		
+		DBClient.link();
+		DBClient.loadAccountInfo();
+		
 	}
+});
+
+var viewVideos = Alloy.createController('viewVideoList').getView();
+$.btnList.addEventListener('click',function() {
+	
+	var dataSet = Titanium.App.Properties.getList('recordFileList');
+	for (var key in dataSet) {
+		if (dataSet.hasOwnProperty(key)) {
+		  Ti.API.log('Data = ' + dataSet[key].datetime + '/' + dataSet[key].videopath);
+		}
+	}
+	$.viewOverlayMain.add(viewVideos);
 });
 
 //$.btnRecord.image = "/images/saveto" + Titanium.App.Properties.getInt('recordSaveTo') + ".png";
@@ -187,6 +204,7 @@ $.btnRecord.addEventListener('click',function() {
 
 //---------------------------------------------------------------------------//
 
+
 Ti.App.addEventListener('updateLableMessage', function(e) {
 	
 	$.lblRecordTimer.text = e.msg;
@@ -197,6 +215,26 @@ Ti.App.addEventListener('startVideoRecord', function(e) {
 	if(Titanium.App.Properties.getBool('deviceIsRecordingNow')==false) {
 		//Ti.API.log('Start Record, save to Gallery: '+Titanium.App.Properties.getBool('recordSaveGallery'));
 		Titanium.App.Properties.setBool('deviceIsRecordingNow', true);
+		
+		$.btnCamera.enabled = false;
+		$.btnFlash.enabled = false;
+		$.btnQuality.enabled = false;
+		$.btnLength.enabled = false;
+		$.btnDropbox.enabled = false;
+		
+		if (Titanium.App.Properties.getInt('recordFlashAction') == 1)
+		{
+			Ti.Media.cameraFlashMode = Ti.Media.CAMERA_FLASH_ON;
+		}
+		else if (Titanium.App.Properties.getInt('recordFlashAction') == 2)
+		{
+			Ti.Media.cameraFlashMode = Ti.Media.CAMERA_FLASH_OFF;
+		}
+		else
+		{
+			Ti.Media.cameraFlashMode = Ti.Media.CAMERA_FLASH_AUTO;
+		}
+
 		Titanium.Media.startVideoCapture();	
 		fgVideoTimer.set(Titanium.App.Properties.getInt('recordVideoLength'),0);
 		numVideoTimer = 0;
@@ -216,9 +254,16 @@ Ti.App.addEventListener('stopVideoRecord', function(e) {
 		
 		fgVideoTimer.stop();
 		Titanium.Media.stopVideoCapture();
+		
+		$.btnCamera.enabled = true;
+		$.btnFlash.enabled = true;
+		$.btnQuality.enabled = true;
+		$.btnLength.enabled = true;
+		$.btnDropbox.enabled = true;
 	}
 });
 
-
-
+Ti.App.addEventListener('removeVideoListView', function(e) {
+	$.viewOverlayMain.remove(viewVideos);
+});
 //---------------------------------------------------------------------------//

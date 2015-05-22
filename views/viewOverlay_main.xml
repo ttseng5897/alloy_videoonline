@@ -1,7 +1,7 @@
 <Alloy>
 	<View id="viewOverlayMain">
 			<View id="viewStatusBar">
-				<Button id="btnScreen"s></Button>
+				<Button id="btnScreen"></Button>
 				<Button id="btnCamera"></Button>
 				<Button id="btnFlash"></Button>
 				<Button id="btnQuality"></Button>

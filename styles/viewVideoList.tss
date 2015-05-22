@@ -1,0 +1,65 @@
+"#viewPopup": {
+	top: 0,
+	left: 0,
+	right: 0,
+	bottom: 0,
+	backgroundColor: "black",
+}
+
+"#viewVideoList": {
+	top: 20,
+	left: 0,
+	right: 0,
+	bottom: 70,
+	color: 'white'
+}
+
+"#listviewVideofiles": { 
+	top: 0,
+	left: 0,
+	right: 0,
+	bottom: 0,
+	backgroundColor: 'black'
+}
+
+"#btnCloseWindow": {
+	left: 0,
+	bottom: 0,
+	height: 60,
+	width: 90,
+	color: 'white',
+	title: 'Exit',
+	backgroundColor: "#115eed",
+	font: {
+		fontSize: 22,
+		fontFamily: 'Helvetica Neue'
+	}
+}
+
+"#btnPlayVideo": {
+	left: 90,
+	bottom: 0,
+	height: 60,
+	width: 120,
+	color: 'white',
+	title: 'Play',
+	backgroundColor: "#eb5402",
+	font: {
+		fontSize: 22,
+		fontFamily: 'Helvetica Neue'
+	}
+}
+
+"#btnDeleteVideo": {
+	right: 0,
+	bottom: 0,
+	height: 60,
+	width: 60,
+	color: 'white',
+	title: 'Del',
+	backgroundColor: "#f32727",
+	font: {
+		fontSize: 22,
+		fontFamily: 'Helvetica Neue'
+	}
+}

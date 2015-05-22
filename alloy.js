@@ -15,10 +15,9 @@ if(Titanium.App.Properties.hasProperty('recordVideoQuality') == false) { Titaniu
 if(Titanium.App.Properties.hasProperty('recordFlashAction') == false) { Titanium.App.Properties.setInt('recordFlashAction',2); }
 if(Titanium.App.Properties.hasProperty('recordVideoLength') == false) { Titanium.App.Properties.setInt('recordVideoLength',2); }
 if(Titanium.App.Properties.hasProperty('recordSaveTo') == false) { Titanium.App.Properties.setInt('recordSaveTo',0); }
-//if(Titanium.App.Properties.hasProperty('recordSaveGallery') == false) { Titanium.App.Properties.setBool('recordSaveGallery',true); }
 if(Titanium.App.Properties.hasProperty('recordFileList') == false) { Titanium.App.Properties.setList('recordFileList',[]); }
+//Titanium.App.Properties.setList('recordFileList',[]);
 
-//if(Titanium.App.Properties.hasProperty('isRecordingNow') == false) { Titanium.App.Properties.setBool('isRecordingNow',false); }
 Titanium.App.Properties.setBool('isRecordingNow',false);
 Titanium.App.Properties.setBool('deviceIsRecordingNow',false);
 
@@ -47,10 +46,11 @@ if(Ti.Platform.osname === 'android'){
   Ti.API.info('Ti.Platform.displayCaps.ydpi: ' + Ti.Platform.displayCaps.ydpi);
 }
 
+var recordVideoList = Titanium.App.Properties.getList('recordFileList');
 
 var dropbox = require("com.clinsoftsol.dropboxti");
 
-var session = dropbox.createClient({
+var DBClient = dropbox.createClient({
 	appKey: 'mxp13dhy62rj3wk',
 	appSecret: 'addmjkslazn6dqj',
 	appRoot: dropbox.DB_ROOT_APP,
@@ -59,6 +59,18 @@ var session = dropbox.createClient({
 		Ti.API.error("Error subtype = "+subtype);
 		Ti.API.error("Error code = "+code);
 	},
+});
+
+DBClient.addEventListener('loadedAccountInfo', function(e) {
+    Ti.API.info("*** ACCOUNT INFO ***");
+    Ti.API.info('country = '+e.country);
+    Ti.API.info('displayName = '+e.displayName);
+    Ti.API.info('userId = '+e.userId);
+    Ti.API.info('referralLink = '+e.referralLink);
+    Ti.API.info('Quota.normalBytes = '+e.quota.normalBytes);
+    Ti.API.info('Quota.sharedBytes = '+e.quota.sharedBytes);
+    Ti.API.info('Quota.totalConsumedBytes = '+e.quota.totalConsumedBytes);
+    Ti.API.info('Quota.totalBytes = '+e.quota.totalBytes);
 });
 
 function wait (millis) {
@@ -149,6 +161,32 @@ var openCamera = function() {
 			}
 		});
 	}
+	
+	function saveDropbox(videoFile) {
+
+		var filename = Titanium.Filesystem.applicationDataDirectory + "/"+ 'record_' + new Date().getTime() + ".mov";
+		var f = Titanium.Filesystem.getFile(filename);
+		if (f.exists()) {
+			Ti.API.info('The file exist , trying to delete it before using it :' + f.deleteFile());
+			f = Titanium.Filesystem.getFile(filename);
+		}
+		f.write(videoFile);
+		Ti.App.fireEvent('updateLableMessage', {"msg": "ok" });
+		//win.backgroundImage = f.nativePath;
+		//var datetimeVideo = new Date().getFullYear() + "/" + new Date().getMonth() + "/" + new Date().getDate() + " " + new Date().getHours() + ":" + new Date().getMinutes();
+		var numYear = new Date().getFullYear();
+		var numMonth = new Date().getMonth();
+		var numDay = new Date().getDate();
+		var numHour = new Date().getHours();
+		var numMinute = new Date().getMinutes();
+		
+		recordVideoList.push({"title": numYear + '/' + numMonth + '/' + numDay, "displayname": numHour + ':' + numMinute,"videopath": filename, "datetime": numYear + '/' + numMonth + '/' + numDay + ' ' + numHour + ':' + numMinute});
+		Titanium.App.Properties.setList('recordFileList', recordVideoList);
+		
+		if(Titanium.App.Properties.getBool('isRecordingNow')==true) {
+			Ti.App.fireEvent('startVideoRecord');
+		}
+	}
 
 	Titanium.Media.showCamera({
 			
@@ -162,7 +200,7 @@ var openCamera = function() {
 				
 				Titanium.App.Properties.getBool('recordSaveTo')==0 && saveGallery(event.media);
 				
-					
+				Titanium.App.Properties.getBool('recordSaveTo')==1 && saveDropbox(event.media);
 			},
 			cancel:function()
 			{
