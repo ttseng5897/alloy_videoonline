@@ -162,22 +162,17 @@ $.btnDropbox.addEventListener('click',function() {
 		//Titanium.App.Properties.setBool('recordSaveGallery',false);
 		$.btnDropbox.image = "/images/saveto1.png";
 		Titanium.App.Properties.setInt('recordSaveTo',1);
-		
-		DBClient.link();
-		DBClient.loadAccountInfo();
-		
+		if(DBClient.isLinked) {
+			
+		}else{
+			DBClient.link();
+			DBClient.loadAccountInfo();
+		}
 	}
 });
 
 var viewVideos = Alloy.createController('viewVideoList').getView();
 $.btnList.addEventListener('click',function() {
-	
-	var dataSet = Titanium.App.Properties.getList('recordFileList');
-	for (var key in dataSet) {
-		if (dataSet.hasOwnProperty(key)) {
-		  Ti.API.log('Data = ' + dataSet[key].datetime + '/' + dataSet[key].videopath);
-		}
-	}
 	$.viewOverlayMain.add(viewVideos);
 });
 

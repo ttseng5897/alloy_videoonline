@@ -3,23 +3,21 @@
 	left: 0,
 	right: 0,
 	bottom: 0,
-	backgroundColor: "black",
+	backgroundColor: "white"
 }
 
 "#viewVideoList": {
-	top: 20,
+	top: 0,
 	left: 0,
 	right: 0,
-	bottom: 70,
-	color: 'white'
+	bottom: 70
 }
 
 "#listviewVideofiles": { 
 	top: 0,
 	left: 0,
 	right: 0,
-	bottom: 0,
-	backgroundColor: 'black'
+	bottom: 0
 }
 
 "#btnCloseWindow": {

@@ -33,6 +33,7 @@ var CAMERA_SCREEN_RATIO = (DEVICE_HEIGHT - (80*2)) / DEVICE_HEIGHT;
 
 var VIDEO_MAX_DURATION = 480*1000; //480秒
 
+var uploadingDropboxNow = false;
 
 Ti.API.info('Ti.Platform.displayCaps.density: ' + Ti.Platform.displayCaps.density);
 Ti.API.info('Ti.Platform.displayCaps.dpi: ' + Ti.Platform.displayCaps.dpi);
@@ -72,6 +73,16 @@ DBClient.addEventListener('loadedAccountInfo', function(e) {
     Ti.API.info('Quota.totalConsumedBytes = '+e.quota.totalConsumedBytes);
     Ti.API.info('Quota.totalBytes = '+e.quota.totalBytes);
 });
+
+DBClient.addEventListener('uploadProgress', function(e) {
+	Ti.API.log('Source: ' + e.srcPath + ' / Dest:' + e.destPath + '/ DropboxProgress = '+e.progress);
+});
+
+DBClient.addEventListener('uploadedFile', function(e) {
+	Ti.API.log('Source: ' + e.srcPath + ' uploaded!!');
+});
+
+DBClient.unlink();
 
 function wait (millis) {
     var date = new Date();
@@ -120,14 +131,19 @@ var viewOverlay = Alloy.createController('viewOverlay_main').getView();
 var numGlobalTimer = 0;
 var fgGlobalTimer = new countDown(365*24*60,0, 
 		function() {	
-			Ti.API.log('Global timer: '+numGlobalTimer);
+			//Ti.API.log('uploadingDropboxNow: '+uploadingDropboxNow);
 			numGlobalTimer++;
+			
+			if(uploadingDropboxNow==false) {
+				Ti.API.log('Fire Dropbox upload event.');
+				Ti.App.fireEvent('uploadToDropbox');
+			}
 		},
 		function() {
 			Ti.API.log('Global timer stopped!');
 		}
 	);	
-
+fgGlobalTimer.start();
 
 var fgVideoTimer;
 var numVideoTimer = 0;
