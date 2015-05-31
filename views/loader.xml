@@ -1,0 +1,7 @@
+<Alloy>
+	<Window id="rocket" class="container">
+		<View id="overlay" />
+		<ImageView id="imgVideoRecorder" image="/images/videoLogo.png" />
+		<ImageView id="imgTextLogo" image="/images/urlLogo.png" />
+	</Window>
+</Alloy>

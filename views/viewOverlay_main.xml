@@ -16,5 +16,7 @@
 				<Button id="btnRecord" />
 				<Label id="lblRecordTimer" />
 			</View>
+			<View id="viewMask" onClick="hideMask" />
+			<Label id="lblMaskText" />
 	</View>
 </Alloy>

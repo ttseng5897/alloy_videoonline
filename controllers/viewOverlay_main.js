@@ -64,13 +64,13 @@ var cameras = Ti.Media.availableCameras;
 			{
 				if (Ti.Media.camera == Ti.Media.CAMERA_FRONT)
 				{
-					displayMSG("前鏡頭", 1);
+					displayMSG(L("BackLens"), 1);
 					
 					Ti.Media.switchCamera(Ti.Media.CAMERA_REAR);
 				}
 				else
 				{
-					displayMSG("後鏡頭", 1);
+					displayMSG(L("RearLens"), 1);
 	
 					Ti.Media.switchCamera(Ti.Media.CAMERA_FRONT);
 				}
@@ -85,21 +85,21 @@ $.btnFlash.addEventListener('click',function()
 
 			if (Titanium.App.Properties.getInt('recordFlashAction') == 0)
 			{
-				displayMSG("Should be ON: "+Ti.Media.cameraFlashMode, 1);
+				displayMSG(L("FlashOn"), 1);
 				Ti.Media.cameraFlashMode = Ti.Media.CAMERA_FLASH_ON;
 				Titanium.App.Properties.setInt('recordFlashAction', 1);
 				$.btnFlash.backgroundImage = "/images/flash1.png";
 			}
 			else if (Titanium.App.Properties.getInt('recordFlashAction') == 1)
 			{
-				displayMSG("Should be OFF: "+Ti.Media.cameraFlashMode, 1);
+				displayMSG(L("FlashOff"), 1);
 				Ti.Media.cameraFlashMode = Ti.Media.CAMERA_FLASH_OFF;
 				Titanium.App.Properties.setInt('recordFlashAction', 2);
 				$.btnFlash.backgroundImage = "/images/flash2.png";
 			}
 			else
 			{
-				displayMSG("Should be AUTO: "+Ti.Media.cameraFlashMode, 1);
+				displayMSG(L("FlashAuto"), 1);
 				Ti.Media.cameraFlashMode = Ti.Media.CAMERA_FLASH_AUTO;
 				Titanium.App.Properties.setInt('recordFlashAction', 0);
 				$.btnFlash.backgroundImage = "/images/flash0.png";
@@ -111,17 +111,17 @@ $.btnQuality.addEventListener('click',function() {
 	if(Titanium.App.Properties.getInt('recordVideoQuality') == 1) {
 		$.btnQuality.backgroundImage = "/images/video2.png";
 		Titanium.App.Properties.setInt('recordVideoQuality',2);
-		displayMSG("Normal Quality", 1);
+		displayMSG(L("NormalQuality"), 1);
 	}
 	else if(Titanium.App.Properties.getInt('recordVideoQuality') == 2) {
 		$.btnQuality.backgroundImage = "/images/video3.png";
 		Titanium.App.Properties.setInt('recordVideoQuality',3);
-		displayMSG("Bad Quality", 1);
+		displayMSG(L("NotfineQuality"), 1);
 	}
 	else{
 		$.btnQuality.backgroundImage = "/images/video1.png";
 		Titanium.App.Properties.setInt('recordVideoQuality',1);
-		displayMSG("Best Quality", 1);
+		displayMSG(L("GoodQuality"), 1);
 	}
 });
 
@@ -130,21 +130,26 @@ $.btnLength.image = "/images/cut" + Titanium.App.Properties.getInt('recordVideoL
 $.btnLength.addEventListener('click',function() {
 	Ti.API.log('recordVideoLength = '+Titanium.App.Properties.getInt('recordVideoLength'));
 	if(Titanium.App.Properties.getInt('recordVideoLength') == 1) {
+		displayMSG(L("minite2"), 1);
 		$.btnLength.image = "/images/cut2.png";
 		Titanium.App.Properties.setInt('recordVideoLength',2);
 	}
 	else if(Titanium.App.Properties.getInt('recordVideoLength') == 2) {
+		displayMSG(L("minite3"), 1);
 		$.btnLength.image = "/images/cut3.png";
 		Titanium.App.Properties.setInt('recordVideoLength',3);
 	}
 	else if(Titanium.App.Properties.getInt('recordVideoLength') == 3) {
+		displayMSG(L("minite4"), 1);
 		$.btnLength.image = "/images/cut4.png";
 		Titanium.App.Properties.setInt('recordVideoLength',4);	
 	}
 	else if(Titanium.App.Properties.getInt('recordVideoLength') == 4) {
+		displayMSG(L("minite5"), 1);
 		$.btnLength.image = "/images/cut5.png";
 		Titanium.App.Properties.setInt('recordVideoLength',5);
 	}else{
+		displayMSG(L("minite1"), 1);
 		$.btnLength.image = "/images/cut1.png";
 		Titanium.App.Properties.setInt('recordVideoLength',1);
 	}
@@ -154,21 +159,73 @@ $.btnDropbox.image = "/images/saveto" + Titanium.App.Properties.getInt('recordSa
 $.btnDropbox.addEventListener('click',function() {
 	//Ti.API.log('recordSaveTo = '+Titanium.App.Properties.getInt('recordVideoLength'));
 	if(Titanium.App.Properties.getInt('recordSaveTo') == 1) {  // recordSaveTo: 0 is save to local gallery , 1 is upload to Dropbox
-		//Titanium.App.Properties.setBool('recordSaveGallery',true);
-		$.btnDropbox.image = "/images/saveto0.png";
-		Titanium.App.Properties.setInt('recordSaveTo',0);
+	
+		var optionsDialogOpts = {
+			options:[L('optionLogout'), L('optionSaveAlbum'), L('cancel')],
+			destructive:0,
+			cancel:2,
+			title: L('DropboxAccount')
+		};
+		
+		var dialog = Titanium.UI.createOptionDialog(optionsDialogOpts);
+		
+		// add event listener
+		dialog.addEventListener('click',function(e)
+		{
+			
+			if(e.index == 0 || e.index == 1) {
+				
+				$.btnDropbox.image = "/images/saveto0.png";
+				Titanium.App.Properties.setInt('recordSaveTo',0);
+				
+				if(e.index == 0) {
+					displayMSG(L("DropboxLogout"), 2);
+					DBClient.unlink();
+				}else{
+					displayMSG(L("DropboxOff"), 2);
+				}
+			}
+		});
+		
+		dialog.show();
 		
 	}else{
-		//Titanium.App.Properties.setBool('recordSaveGallery',false);
-		$.btnDropbox.image = "/images/saveto1.png";
-		Titanium.App.Properties.setInt('recordSaveTo',1);
-		if(DBClient.isLinked) {
+		
+		if(Titanium.Network.online == true) {
+	
+			$.btnDropbox.image = "/images/saveto1.png";
+			Titanium.App.Properties.setInt('recordSaveTo',1);
+			displayMSG(L("DropboxOn"), 2);
+			if(DBClient.isLinked) {
+				
+			}else{
+				
+				var optionsDialogOpts = {
+					options:[L('LoginDropboxAccount'), L('cancel')],
+					destructive:0,
+					cancel:1,
+					title: L('askLoginDropbox')
+				};
+				
+				var dialog = Titanium.UI.createOptionDialog(optionsDialogOpts);
+				
+				// add event listener
+				dialog.addEventListener('click',function(e)
+				{
+					
+					if(e.index == 0)  DBClient.link();
+
+				});
+				
+				dialog.show();
+			}
 			
 		}else{
-			DBClient.link();
-			DBClient.loadAccountInfo();
+			alert(L('NoNetwork'));
 		}
+		
 	}
+
 });
 
 var viewVideos = Alloy.createController('viewVideoList').getView();
@@ -186,19 +243,52 @@ $.btnRecord.addEventListener('click',function() {
 		wait(1500);
 		openCamera();
 		wait(800);
+		displayMSG(L("StartRecord"), 2);
 		Ti.App.fireEvent('startVideoRecord');
 		
 	}else{
 		Titanium.App.Properties.setBool('isRecordingNow', false);
-		
+		displayMSG(L("StopRecord"), 2);
 		Ti.App.fireEvent('stopVideoRecord');
 	}
 		
 });
 
+$.btnScreen.addEventListener('click',function() {
+	$.viewMask.visible = true;
+	
+	$.lblMaskText.opacity = 1;
+	var animation = Titanium.UI.createAnimation();
+		animation.backgroundColor = 'black';
+		animation.duration = 3000;
+		var animationHandler = function() {
+		  animation.removeEventListener('complete',animationHandler);
+		  $.lblMaskText.visible = true;
+		  
+		  setTimeout(function(){
+		  	  for(var i=0;i<1000;i++) {
+				  $.lblMaskText.opacity = 1 - ((i+1)/1000);
+			  }
+		  }, 5000);
+			
+		  
+	};
+	animation.addEventListener('complete',animationHandler);
+	$.viewMask.animate(animation);
+});
+
+function hideMask() {
+	$.viewMask.visible = false;
+	$.lblMaskText.visible = false;
+	$.viewMask.backgroundColor = null;
+}
+
 
 //---------------------------------------------------------------------------//
 
+$.viewMask.visible = false;
+$.lblMaskText.visible = false;
+$.lblMaskText.text = L("MaskText");
 
 Ti.App.addEventListener('updateLableMessage', function(e) {
 	

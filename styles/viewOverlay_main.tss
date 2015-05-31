@@ -111,9 +111,26 @@
 "#lblMessageText": {
 	color: "green",
 	font: {
-			fontSize: 18,
+			fontSize: 14,
+			fontFamily: 'Helvetica Neue'
+		},
+	height: "100%",
+	width: "100%",
+	textAlign: 'center'
+}
+
+"#viewMask": {
+	width: "100%",
+	height: "100%",
+	left: 0,
+	top: 0
+}
+
+"#lblMaskText": {
+	color: "white",
+	font: {
+			fontSize: 24,
 			fontFamily: 'Helvetica Neue'
 		},
 	textAlign: 'center'
 }
-
